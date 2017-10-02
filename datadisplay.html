@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+ <html> 
+  <head>
+   <meta charset='UTF-8'>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script type="text/javascript" src="data.json"></script>
+  <style>
+    table { border-collapse: collapse; }
+    
+    table, th, td { border: 1px solid black; }
+
+    th { 
+     text-align: center;
+     font-weight : bold; 
+    } 
+    td.title   { width: 25% }
+    td.details { width: 60% } 
+   </style>
+  </head>
+  
+  <body>
+   <p>Jobs: <strong><span id="long"></span></strong> records</p> 
+   <p><span id="time"></span></p>
+   <div class="btn">
+      <div class="form-group">
+          <input style="width: 20%;" type="text" id="search" placeholder="Search" class="form-control">
+
+      </div>
+   </div> 
+   </br>
+
+   <div id="root"></div>
+   <script language="JavaScript">
+    
+    function load() {
+      var data = JSON.parse(data);
+    }
+    
+    var longdata = data.length;
+    document.getElementById("long").innerHTML = longdata;
+
+    // ---------------- END COPY HERE ----------------> 
+
+    // create table headers 
+    function addHeaders(table, keys) 
+     {
+      var row = table.insertRow();
+   
+      for( var i=0; i<keys.length; i++) 
+       {
+        var cell = row.insertCell();
+        cell.appendChild(document.createTextNode(keys[i]));
+       } 
+     }
+
+    var table = document.createElement('table');
+    // var URL_REGEXP = new RegExp('(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?'); 
+
+    addHeaders(table, Object.keys(data[0])); 
+
+    // populate items 
+    for(var i=0; i<data.length; i++) // ignore last item (= array of tags)
+     {
+      var child = data[i];
+      var row = table.insertRow(); 
+
+      Object.keys(child).forEach(function(k) 
+       {
+        var cell = row.insertCell();
+
+        // console.log(k);
+        keyStr = k.toLowerCase(); 
+
+        if ("Title" === keyStr)
+         {
+          // flatten JSON array down into a string if needed 
+          if (typeof child[k] !== 'string') 
+           child[k] = child[k].join(" ") 
+          
+          cell.appendChild(document.createTextNode(child[2]));
+         } 
+        else if ("Description" === keyStr)
+         {
+          // flatten JSON array down into a string if needed 
+          if (typeof child[k] !== 'string') 
+           child[k] = child[k].join(" ") 
+          
+          cell.appendChild(document.createTextNode(child[0]));
+         }
+        else if ("PostID" === keyStr)
+         {
+          // flatten JSON array down into a string if needed 
+          if (typeof child[k] !== 'string') 
+           child[k] = child[k].join(" ") 
+          
+          cell.appendChild(document.createTextNode(child[k]));
+         }
+        else if ("Date" === keyStr)
+         {
+          // flatten JSON array down into a string if needed 
+          if (typeof child[k] !== 'string') 
+           child[k] = child[k].join(" ") 
+          
+          cell.appendChild(document.createTextNode(child[k]));
+         }            
+        else if ("URL" === keyStr) 
+         {
+          // flatten JSON array down into a string if needed 
+          if (typeof child[k] !== 'string') 
+           child[k] = child[k].join(" ") 
+          
+          cell.appendChild(document.createTextNode(child[k]));
+         } 
+        else if ("Compensation" === keyStr)
+         {
+          // flatten JSON array down into a string if needed 
+          if (typeof child[k] !== 'string') 
+           child[k] = child[k].join(" ") 
+          
+          cell.appendChild(document.createTextNode(child[k]));
+         }
+        else if ("Employment Type" === keyStr)
+         {
+          // flatten JSON array down into a string if needed 
+          if (typeof child[k] !== 'string') 
+           child[k] = child[k].join(" ") 
+          
+          cell.appendChild(document.createTextNode(child[k]));
+         }
+        else if ("Address" === keyStr)
+         {
+          // flatten JSON array down into a string if needed 
+          if (typeof child[k] !== 'string') 
+           child[k] = child[k].join(" ") 
+          
+          cell.appendChild(document.createTextNode(child[k]));
+         } 
+        else // unknown tag 
+         {
+          cell.appendChild(document.createTextNode(child[k]));
+         }    
+       })
+     }
+
+     document.getElementById('root').appendChild(table);
+
+    //jquery function to search in the table
+    var $rows = $('#root tr');
+    $('#search').keyup(function() {
+
+        var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+            reg = RegExp(val, 'i'),
+            text;
+
+        $rows.show().filter(function() {
+            text = $(this).text().replace(/\s+/g, ' ');
+            return !reg.test(text);
+        }).hide();
+    });
+
+    var currentdate = new Date(); 
+    var datetime = "Last Sync: " + currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+
+    document.getElementById("time").innerHTML = datetime;
+
+    </script>
+  </body>
+</html>
